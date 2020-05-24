@@ -22,21 +22,35 @@ export default class DeckHandler
 		const a = '.card {\nfont-family: arial;\name\nfont-size: 20px;\ntext-align: center;\ncolor: black;\nbackground-color: white;\n'
 		"{s}\n{a}"
 
+	def worklflowyName dom
+		const names = dom('.name .innerContentContainer')
+		return null if !names
+		names.first().text()
+
 	def handleHTML contents, deckName = null
 		const inputType = 'HTML'
 		const dom = cheerio.load(contents)
-		const name = dom('title').text()
+		let name = dom('title').text()
+		name ||= worklflowyName(dom)
 		let style = /<style[^>]*>([^<]+)<\/style>/i.exec(contents)[1]
 		if style
 			style = appendDefaultStyle(style)
 		const toggleList = dom('.toggle li').toArray()
-		const cards = toggleList.map do |t|
+		let cards = toggleList.map do |t|
 			const toggle = dom(t).find('details')
 			const summary = toggle.find('summary').html()
 			const backSide = toggle.html()
 			return {name: summary, backSide: backSide}
 
-		console.log('cards')
+		if cards.length == 0
+			const list_items = dom('body ul li').toArray()
+			cards = list_items.map do |li|
+				let front = dom(li[0]).find('span').text()
+				const _ = li.children.shift()
+				const back = dom(li.children).html()
+				return {name: front, backSide: back}
+
+		console.log('cards', cards)
 		{name, cards, inputType, style}
 
 	def handleMarkdown contents, deckName = null
