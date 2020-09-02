@@ -230,7 +230,8 @@ export class DeckParser
 		let counter = 0
 		for card in deck.cards
 			console.log("exporting {deck.name} {deck.cards.indexOf(card)} / {card_count}")
-			card.number = counter++
+			card.number = "{counter}"
+			counter++
 			if self.use_cloze
 				card.name = self.handleClozeDeletions(card.name)
 			elif self.use_input

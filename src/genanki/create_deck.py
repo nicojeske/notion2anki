@@ -64,9 +64,10 @@ if __name__ == '__main__':
     CSS += file.read()
 
   MY_CLOZE_MODEL = Model(
-  998877661,
+  6394002335189144854,
   'notion2Anki Cloze Model',
   fields=[
+    { 'name': 'Number' },
     {'name': 'Text'},
     {'name': 'Extra'},
     {'name': 'MyMedia'},
@@ -80,19 +81,20 @@ if __name__ == '__main__':
   model_type=Model.CLOZE)
 
   BASIC_MODEL = Model(
-    2020, 'notion2anki',
+    6394002335189144855, 'notion2anki',
     fields=[
-      { 'name': 'AField' },
-      { 'name': 'BField' },
+      { 'name': 'Number' },
+      { 'name': 'Front' },
+      { 'name': 'Back' },
       { 'name': 'MyMedia' },
     ],
     templates=[
       {
         'name': 'card1',
-        'qfmt': '{{AField}}',
+        'qfmt': '{{Front}}',
         'afmt': '{{FrontSide}}'
                 '<hr id="answer">'
-                '{{BField}}',
+                '{{Back}}',
       }
     ],
     css=CSS
@@ -101,6 +103,7 @@ if __name__ == '__main__':
   INPUT_MODEL = Model(
     6394002335189144856, 'notion2anki-input-card',
     fields=[
+      { 'name': 'Number' },
       { 'name': 'Front' },
       { 'name': 'Back' },
       { 'name': 'Input' },
@@ -126,7 +129,7 @@ if __name__ == '__main__':
     data = json.load(json_file)
     deck_name = data['name']
     for card in data['cards']:
-      fields = [card['name'], card['back'], ",".join(card['media'])]
+      fields = [card['number'], card['name'], card['back'], ",".join(card['media'])]
       model = MY_CLOZE_MODEL
 
       # TODO: sanity check the card fields
@@ -135,7 +138,7 @@ if __name__ == '__main__':
       elif data['card_type'] == 'enable-input':
         model = INPUT_MODEL
         fields = [card['name'].replace('{{type:Input}}', ''), card['back'], card['answer'], ",".join(card['media'])]
-      my_note = Note(model, fields=fields, sort_field=card['number'])
+      my_note = Note(model, fields=fields, sort_field='Number')
       notes.append(my_note)
 
   _wr_apkg(notes, deck_id, deck_name, data['media'])
