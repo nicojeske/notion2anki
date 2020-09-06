@@ -51,7 +51,7 @@ export class DeckParser
 
 	get name do self.payload[0].name
 
-	def constructor md, contents, settings = {}, files
+	def constructor parent, settings = {}, files
 		const deckName = settings.deckName
 		self.settings = settings
 		self.settings['font-size'] = self.settings['font-size'] + 'px'
@@ -59,9 +59,8 @@ export class DeckParser
 		self.use_cloze = self.is_cloze!
 		self.image = null
 		self.files = files || []
-		if md
-			TriggerUnsupportedFormat()
-		self.payload = handleHTML(contents, deckName)
+		self.payload = handleHTML(files[parent], deckName)
+		self.parentPage = parent.replace('.html', '')
 
 	def handleHTML contents, deckName = null, decks = []
 		const dom = cheerio.load(contents)
@@ -88,6 +87,7 @@ export class DeckParser
 					names[end] = "{pi} {last}"
 					name = names.join("::")
 
+		console.log("parsing deck.name={name}")
 		const toggleList = dom(".page-body > ul").toArray()
 		let cards = toggleList.map do |t|
 			// We want to perserve the parent's style, so getting the class
@@ -111,26 +111,22 @@ export class DeckParser
 						let back = toggleHTML.replace(summary, "")
 						return { name: summary.html(), back: back }
 					else
-						console.log('error in (missing valid detailts)', parentUL.html())
+						console.log('error in (missing valid details)', parentUL.html())
 		# Prevent bad cards from leaking out
 		cards = cards.filter(Boolean)
-		console.log('cards', cards)
 		cards = sanityCheck(cards)
 
 		decks.push({name: name, cards: cards, image: image, style: style, id: self.generate_id!})
 
-		# unless cards.length > 0
-		# 	TriggerNoCardsError()
-		const subpages = dom(".link-to-page").toArray()
+		const subpages = dom(".page-body > .link-to-page").toArray()
 		for page in subpages
 			const spDom = dom(page)
 			const ref = spDom.find('a').first()
 			const href = ref.attr('href')
-			if href.startsWith('http')
-				throw new Error('Unsupported sub page type')
 			const pageContent = self.files[global.decodeURIComponent(href)]
-			const subDeckName = spDom.find('title').text() || ref.text()
-			self.handleHTML(pageContent, "{name}::{subDeckName}", decks)
+			if pageContent
+				const subDeckName = spDom.find('title').text() || ref.text()
+				self.handleHTML(pageContent, "{name}::{subDeckName}", decks)
 
 		return decks
 
@@ -181,6 +177,10 @@ export class DeckParser
 		return null if !suffix
 
 		let file = files["{filePath}"]
+		if !file
+			const lookup = "{self.parentPage}/{filePath}"
+			console.log('lookup', lookup)
+			file = files[lookup]
 		const newName = self.newUniqueFileName(filePath) + suffix
 		exporter.addMedia(newName, file)
 		return newName
@@ -307,7 +307,6 @@ export class DeckParser
 						const audio = "<iframe width='100%' height='166' scrolling='no' frameborder='no' src='https://w.soundcloud.com/player/?url={soundCloudUrl}'></iframe>"
 						card.back += audio
 
-					console.log('xparse back', self.use_input)
 					if self.use_cloze
 						# TODO: investigate why cloze deletions are not handled properly on the back / extra
 						card.back = self.handleClozeDeletions(card.back)
@@ -330,7 +329,8 @@ export class DeckParser
 		exporter.save()
 
 export def PrepareDeck file_name, files, settings
-		const parser = new DeckParser(file_name.match(/.md$/), files[file_name], settings, files)
+		console.log('Preparing deck from', file_name)
+		const parser = new DeckParser(file_name, settings, files)
 		const apkg = await parser.build()
 		# TODO: rename decks below to something more sensible
-		{name: "{parser.name}.apkg", apkg: apkg, deck: parser.payload}
+		{name: "{parser.name}.apkg", apkg: apkg}

@@ -27,15 +27,13 @@ def _wr_apkg(payload, media_files):
 
   pkg = Package(decks)
   pkg.media_files = ",".join(media_files)
-  fout_anki = '{NAME}.apkg'.format(NAME=p['id'])
-
+  fout_anki = os.getcwd()+'/'+'{NAME}.apkg'.format(NAME=p['id'])
   pkg.write_to_file(fout_anki)
-  sys.stdout.write(os.getcwd()+'/'+fout_anki)
+  sys.stdout.write(fout_anki)
 
 if __name__ == '__main__':
   data_file = sys.argv[1]
   deck_style = sys.argv[2]
-  deck_name = ''
   # TODO: error handling
 
   CSS = ""
@@ -129,7 +127,6 @@ if __name__ == '__main__':
       deck_name = deck['name']
       deck_id = deck['id']
       notes = []
-    
       for card in deck['cards']:
         fields = [card['name'], card['back'], ",".join(card['media'])]
         model = MY_CLOZE_MODEL
@@ -188,6 +185,6 @@ if __name__ == '__main__':
           }
           </style>
         """ % (image)
-        decks.append({"notes": notes, "id": deck_id, "desc": deck_desc, "name": deck_name})
+      decks.append({"notes": notes, "id": deck_id, "desc": deck_desc, "name": deck_name})
 
   _wr_apkg(decks, media_files)
