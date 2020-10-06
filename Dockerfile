@@ -23,7 +23,7 @@ FROM node:12-alpine
 WORKDIR /app
 
 COPY --from=BUILD_IMAGE /app/dist ./dist
-COPY --from=BUILD_IMAGE /usr/src/app/node_modules ./node_modules
+COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
 
 ENV PORT 8080
 EXPOSE 8080
