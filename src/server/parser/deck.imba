@@ -118,9 +118,16 @@ export class DeckParser
 				const summary = columnList.find('div').first()
 				const toggle = columnList.find("details").first()
 				if summary and toggle
-					const toggleHTML = toggle.html()
+					let toggleHTML = toggle.html()
+					let summaryHTML = summary.html()
+					if dom(summary).find('li').length == 1
+						summaryHTML = dom(summary).find('li').first().html()
+					console.log(dom(summary).find('li').first().html())
+					if dom(toggle).find('li').length == 1
+						toggleHTML = dom(toggle).find('li').first().html()
 					if toggleHTML
-						const note = { name: summary.html(), back: toggleHTML.replace(summary, "") }
+						console.log("Summary: " + summaryHTML)
+						const note = { name: summaryHTML, back: toggleHTML.replace(summary, "") }
 						const cherry = '&#x1F352;' # 🍒
 						if settings['cherry'] and !note.name.includes(cherry) and !note.back.includes(cherry)
 							return null
@@ -195,7 +202,7 @@ export class DeckParser
 		return new CustomExporter(self.first_deck_name, workspace)
 
 	def embedFile exporter, files, filePath
-		console.log('embedFile', Object.keys(files), filePath)
+		# console.log('embedFile', Object.keys(files), filePath)
 		const suffix = self.suffix(filePath)
 		return null if !suffix
 		let file = files["{filePath}"]
@@ -209,7 +216,7 @@ export class DeckParser
 
 	# https://stackoverflow.com/questions/6903823/regex-for-youtube-id
 	def get_youtube_id input
-		console.log('get_youtube_id', arguments)
+		# console.log('get_youtube_id', arguments)
 		try
 			const m =  input.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/ytscreeningroom\?v=|\/sandalsResorts#\w\/\w\/.*\/))([^\/&]{10,12})/)
 			# prevent swallowing of soundcloud embeds
@@ -220,7 +227,7 @@ export class DeckParser
 				return null
 
 	def get_soundcloud_url input
-		console.log('get_soundcloud_url', arguments)
+		# console.log('get_soundcloud_url', arguments)
 		try
 			const sre = /https?:\/\/soundcloud\.com\/\S*/gi
 			return input.match(sre)[0].split('">')[0]
