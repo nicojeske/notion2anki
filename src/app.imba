@@ -1,13 +1,6 @@
 # Components
-import './components/n2a-header'
-import './components/n2a-footer'
 import './pages/upload-page'
-import './pages/home-page'
-import './pages/contact-page'
-import './pages/privacy-page'
-import './pages/faq-page'
-import './pages/benefits-page'
-import './pages/useful-links'
+
 
 tag app-root
 	prop state = 'ready'

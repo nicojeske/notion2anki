@@ -23,6 +23,4 @@ export class ZipHandler
 		const zip = new JSZip()
 		for d in decks
 			zip.file("{d.name}.apkg", d.apkg)
-		if advertisment
-			zip.file("README.txt", advertisment)
 		zip.generateAsync({type: "nodebuffer"})

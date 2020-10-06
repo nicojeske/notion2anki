@@ -51,7 +51,8 @@ const allowed = [
 		'https://notion.2anki.com'
 		'https://2anki.net',
 		'https://2anki.com',
-		'https://notion.2anki.net'
+		'https://notion.2anki.net',
+		'https://n2a.nicojeske.de'
 ]
 
 app.use do |req, res, next|
