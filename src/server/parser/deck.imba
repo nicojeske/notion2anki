@@ -68,6 +68,7 @@ export class DeckParser
 	def handleHTML contents, deckName = null, decks = []
 		const dom = cheerio.load(contents)
 		let name = deckName || dom('title').text()
+		console.log("Title: " + dom('title').text())
 		let style = dom('style').html()
 		style = style.replace(/white-space: pre-wrap;/g, '')
 		let image = null
@@ -79,17 +80,6 @@ export class DeckParser
 		if pageCoverImage
 			image = pageCoverImage.attr('src')
 
-		let pageIcon = dom('.icon')
-		if let pi = pageIcon.html()
-			if !name.includes(pi) and decks.length == 0
-				if !name.includes('::') and !name.startsWith(pi)
-					name = "{pi} {name}"
-				else
-					const names = name.split(/::/)
-					const end = names.length - 1
-					const last = names[end]
-					names[end] = "{pi} {last}"
-					name = names.join("::")
 
 		var toggleList = dom("div[class=column-list]").toArray()
 		toggleList = toggleList.map do |t|
@@ -117,7 +107,7 @@ export class DeckParser
 				dom('summary').addClass(parentClass)
 				const summary = columnList.find('div').first()
 				const toggle = columnList.find("details").first()
-				if summary and toggle
+				if summary
 					let toggleHTML = toggle.html()
 					let summaryHTML = summary.html()
 					if dom(summary).find('li').length == 1
@@ -125,16 +115,14 @@ export class DeckParser
 					console.log(dom(summary).find('li').first().html())
 					if dom(toggle).find('li').length == 1
 						toggleHTML = dom(toggle).find('li').first().html()
-					if toggleHTML
-						console.log("Summary: " + summaryHTML)
-						const note = { name: summaryHTML, back: toggleHTML.replace(summary, "") }
-						const cherry = '&#x1F352;' # 🍒
-						if settings['cherry'] and !note.name.includes(cherry) and !note.back.includes(cherry)
-							return null
-						else
-							return note
+
+					console.log("Summary: " + summaryHTML)
+					const note = { name: summaryHTML, back: toggleHTML.replace(summary, "") }
+					const cherry = '&#x1F352;' # 🍒
+					if settings['cherry'] and !note.name.includes(cherry) and !note.back.includes(cherry)
+						return null
 					else
-						console.log('error in (missing valid detailts)', columnList.html())
+						return note
 		# Prevent bad cards from leaking out
 		cards = cards.filter(Boolean)
 		console.log('cards', cards)
