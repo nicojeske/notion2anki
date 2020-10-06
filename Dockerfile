@@ -1,6 +1,6 @@
 FROM node:12-alpine AS BUILD_IMAGE
 
-RUN apk add --no-cache python3 py-pip git  && rm -rf /var/cache/apk/*
+RUN apk add --no-cache python3 py-pip git curl bash && rm -rf /var/cache/apk/*
 RUN rm -rf /var/lib/apt/lists/*
 # install node-prune (https://github.com/tj/node-prune)
 RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash -s -- -b /usr/local/bin
