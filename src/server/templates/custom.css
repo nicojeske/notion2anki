@@ -1,6 +1,7 @@
 html,
 body {
   text-align: center;
+  background-color: #444444 !important;
 }
 
 .card {
@@ -8,7 +9,6 @@ body {
     "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
   text-align: center;
   color: black;
-  background-color: white;
   border: lightgray 1px solid;
   padding: 16px;
   border-radius: 8px;

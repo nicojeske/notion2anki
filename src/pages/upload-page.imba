@@ -107,8 +107,6 @@ tag upload-page
 								<h1 .title .is-3> "Oh snap, just got an error 😢"
 								<p .subtitle> "Please refresh and try again otherwise report this bug to the developer on Discord with a screenshot 📸"
 								<.notification .is-danger innerHTML=errorMessage>
-								<a.button target="_blank" href="https://discord.gg/PSKC3uS">
-									<span> "Discord"
 						else
 							<.has-text-centered>
 								if downloadLink

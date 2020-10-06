@@ -1,6 +1,7 @@
 # Components
 import './pages/upload-page'
-
+import './pages/privacy-page'
+import './components/n2a-footer'
 
 tag app-root
 	prop state = 'ready'
@@ -19,4 +20,8 @@ tag app-root
 				return "Conversion in progress. Are you sure you want to stop it?"				
 	def render
 		<self>
-			<upload-page state=state progress=progress>
+			if page().includes('privacy')
+				<privacy-page>
+			else
+				<upload-page state=state progress=progress>
+			<n2a-footer>

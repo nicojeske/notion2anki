@@ -15,16 +15,8 @@ tag privacy-page
 					<p .subtitle> "If you have accidentally uploaded anything sensitive, just reach out and I will delete the logs on the server."
 					<p .subtitle> "Your IP address is logged on the server and may be used for research purposes. When that is said no personally identifiable information is collected or harvested."
 					<p .subtitle>							
-						"You can also read the source code at {<a.rounded href="https://github.com/alemayhu/notion2anki" target="_blank"> "alemayhu/notion2anki"}"
-					
-			<.section>
-				<.container>
-					<h2 .title .is-2> "Hosting"
-					<p.subtitle> "This site is being served via DigitalOcean servers and Netlify CDN."
-					<p.subtitle> "You can read their respective privacy policies here: "
-					<ul.subtitle>
-						<li> <a href=doPP target="_blank">  doPP
-						<li> <a href=netlifyPP target="_blank">  netlifyPP
+						"You can also read the source code at {<a.rounded href="https://github.com/nicojeske/notion2anki" target="_blank"> "nicojeske/notion2anki"}"
+
 
 			<.section>
 				<.container>
