@@ -2,6 +2,8 @@ FROM node:12-alpine AS BUILD_IMAGE
 
 RUN apk add --no-cache python3 py-pip git  && rm -rf /var/cache/apk/*
 RUN rm -rf /var/lib/apt/lists/*
+# install node-prune (https://github.com/tj/node-prune)
+RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash -s -- -b /usr/local/bin
 
 WORKDIR /app
 COPY ./src/genanki/requirements.txt .
@@ -13,11 +15,15 @@ RUN npm install
 COPY . .
 RUN npm run build
 
+# run node prune
+RUN /usr/local/bin/node-prune
+
 FROM node:12-alpine
 
 WORKDIR /app
 
 COPY --from=BUILD_IMAGE /app/dist ./dist
+COPY --from=BUILD_IMAGE /usr/src/app/node_modules ./node_modules
 
 ENV PORT 8080
 EXPOSE 8080
