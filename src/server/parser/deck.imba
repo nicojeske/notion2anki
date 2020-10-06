@@ -93,7 +93,7 @@ export class DeckParser
 
 		var toggleList = dom("div[class=column-list]").toArray()
 		toggleList = toggleList.map do |t|
-			const elements = dom(t).find('figure').length
+			const elements = dom(t).find('figure.callout').length
 			if elements == 0
 				return t
 			else
