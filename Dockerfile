@@ -1,7 +1,6 @@
-FROM node:12-slim
+FROM node:12-alpine AS BUILD_IMAGE
 
-RUN apt-get update --fix-missing
-RUN apt-get install python3 python3-pip git -y
+RUN apk add --no-cache python3 py-pip git  && rm -rf /var/cache/apk/*
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -14,8 +13,11 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-RUN apt-get purge -y git
-RUN apt-get autoremove -y
+FROM node:12-alpine
+
+WORKDIR /app
+
+COPY --from=BUILD_IMAGE /app/dist ./dist
 
 ENV PORT 8080
 EXPOSE 8080
