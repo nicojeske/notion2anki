@@ -63,20 +63,10 @@ tag upload-page
 
 	def render
 		<self[d: block py: 4rem]>
-			if canShowTwitchPromo
-				<.has-text-centered[p: 2]>
-					<.notification[d: inline-block]>
-						<button .delete @click.hideTwitchPromo>
-						"Going live on 💜 {<a target="_blank" href="https://www.twitch.tv/alemayhu"> "Twitch"} today!"
 			<.section>
 				<.container[mb: 2rem]>
 					<.has-text-centered[max-width: 640px m: 0 auto]>
-							<h1.title .is-1[mb: 1rem]> "Upload a Notion export to create Anki flashcards"			
-							<p[mt: 1rem]> "Not sure how to export? See our {<a target='_blank' href="https://www.youtube.com/playlist?list=PLzOAzzqpDqukOtwH3IYWiOhr_sjBjfgCd "> "💫 notion2anki YouTube Playlist"}."
-							<p> "If you are having issues with upload, please make sure you are using the HTML export from Notion 🙏🏾"
-							<div.button[bd: 0.6px solid #7289DA bg@hover: #2C2F33]>							
-								<a[c: #7289DA fw: bold] target="_blank" href="https://discord.gg/PSKC3uS"> "Discord"
-							<hr>								
+							<h1.title .is-1[mb: 1rem]> "Upload a Notion export to create Anki flashcards"
 				<.container[p: 1rem max-width: 480px m: 0 auto].box>
 					<form enctype="multipart/form-data" method="post" @submit.prevent=convertFile>
 						<div.field>
@@ -122,7 +112,7 @@ tag upload-page
 						else
 							<.has-text-centered>
 								if downloadLink
-									<download-modal title="Download Ready 🥳" downloadLink=downloadLink deckName=deckName>
+									<a[m: 2rem].button.is-primary .is-large href=downloadLink @click.didDownload download=deckName> "Click to download"
 								elif state == 'ready'
 									<button[mt: 2rem].button.cta .is-large .is-primary type="submit"> "Convert"
 								else

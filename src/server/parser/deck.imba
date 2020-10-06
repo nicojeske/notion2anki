@@ -25,7 +25,7 @@ class CustomExporter
 	prop first_deck_name
 	prop workspace
 	prop media
-	
+
 	def constructor first_deck_name, workspace
 		self.first_deck_name = first_deck_name.replace('.html', '')
 		self.workspace = workspace
@@ -35,12 +35,12 @@ class CustomExporter
 		const abs = path.join(self.workspace, newName)
 		self.media.push(abs)
 		fs.writeFileSync(abs, file)
-	
+
 	def addCard back, tags
 		console.log('addCard', arguments)
 
 	def configure payload
-		const payload_info = path.join(self.workspace, 'deck_info.json')		
+		const payload_info = path.join(self.workspace, 'deck_info.json')
 		console.log('writing payload', payload_info)
 		fs.writeFileSync(payload_info, JSON.stringify(payload, null, 2))
 
@@ -71,7 +71,7 @@ export class DeckParser
 		let style = dom('style').html()
 		style = style.replace(/white-space: pre-wrap;/g, '')
 		let image = null
-		
+
 		if self.settings['font-size'] != '20px'
 			style += '\n' + '* { font-size:' + self.settings['font-size'] + '}'
 
@@ -91,23 +91,32 @@ export class DeckParser
 					names[end] = "{pi} {last}"
 					name = names.join("::")
 
-		const toggleList = dom(".page-body > ul").toArray()
+		var toggleList = dom("div[class=column-list]").toArray()
+		toggleList = toggleList.map do |t|
+			const elements = dom(t).find('figure').length
+			if elements == 0
+				return t
+			else
+				return null
+		toggleList = toggleList.filter(Boolean)
+		console.log(toggleList.length)
+
 		let cards = toggleList.map do |t|
 			// We want to perserve the parent's style, so getting the class
-			const parentUL = dom(t)
+			const columnList = dom(t)
 			const parentClass = dom(t).attr("class")
 
 			const toggleMode = self.settings['toggle-mode']
 			if toggleMode == 'open_toggle'
-				dom('details').attr('open', '')							
-			elif toggleMode == 'close_toggle'							
+				dom('details').attr('open', '')
+			elif toggleMode == 'close_toggle'
 				dom('details').removeAttr('open')
-			
-			if parentUL
+
+			if columnList
 				dom('details').addClass(parentClass)
 				dom('summary').addClass(parentClass)
-				const summary = parentUL.find('summary').first()
-				const toggle = parentUL.find("details").first()
+				const summary = columnList.find('div').first()
+				const toggle = columnList.find("details").first()
 				if summary and toggle
 					const toggleHTML = toggle.html()
 					if toggleHTML
@@ -116,9 +125,9 @@ export class DeckParser
 						if settings['cherry'] and !note.name.includes(cherry) and !note.back.includes(cherry)
 							return null
 						else
-							return note												
+							return note
 					else
-						console.log('error in (missing valid detailts)', parentUL.html())
+						console.log('error in (missing valid detailts)', columnList.html())
 		# Prevent bad cards from leaking out
 		cards = cards.filter(Boolean)
 		console.log('cards', cards)
@@ -147,7 +156,7 @@ export class DeckParser
 
 	def valid_input_card input
 		return false if !self.enable_input()
-		input.name and input.name.includes('strong')		
+		input.name and input.name.includes('strong')
 
 	def sanityCheck cards
 		let empty = cards.find do |x|
@@ -176,9 +185,9 @@ export class DeckParser
 
 		const m = input.match(/\.[0-9a-z]+$/i)
 		return null if !m
-		
+
 		return m[0] if m
-	
+
 	def setupExporter deck, workspace
 		const css = deck.style.replaceAll("'", '"')
 		fs.mkdirSync(workspace)
@@ -197,7 +206,7 @@ export class DeckParser
 		const newName = self.newUniqueFileName(filePath) + suffix
 		exporter.addMedia(newName, file)
 		return newName
-	
+
 	# https://stackoverflow.com/questions/6903823/regex-for-youtube-id
 	def get_youtube_id input
 		console.log('get_youtube_id', arguments)
@@ -209,7 +218,7 @@ export class DeckParser
 			return m[1]
 		catch error
 				return null
-	
+
 	def get_soundcloud_url input
 		console.log('get_soundcloud_url', arguments)
 		try
@@ -236,7 +245,7 @@ export class DeckParser
 			const v = dom(elem).html()
 			const old = "<code>{v}</code>"
 			const newValue = '{{c'+(i+1)+'::'+v+'}}'
-			mangle = mangle.replaceAll(old, newValue)		
+			mangle = mangle.replaceAll(old, newValue)
 		mangle
 
 	def treatBoldAsInput input, inline=false
@@ -253,7 +262,7 @@ export class DeckParser
 
 	def is_cloze
 		self.settings['cloze']
-	
+
 	def enable_input
 		self.settings['enable-input']
 
@@ -268,7 +277,7 @@ export class DeckParser
 
 			const dom = cheerio.load(i)
 			const deletions = dom('del')
-			
+
 			deletions.each do |i, elem|
 				const del = dom(elem)
 				card.tags = del.text().split(',').map do $1.trim().replace(/\s/g, '-')
@@ -280,7 +289,7 @@ export class DeckParser
 		console.log('building deck')
 		const workspace = path.join(os.tmpdir(), nanoid())
 		let exporter = self.setupExporter(self.payload[0], workspace)
-	
+
 		for deck in self.payload
 			const card_count = deck.cards.length
 			deck.image_count = 0
@@ -312,13 +321,13 @@ export class DeckParser
 						console.log('Number of images', images.length)
 						images.each do |i, elem|
 							const originalName = dom(elem).attr('src')
-							if !originalName.startsWith('http')						
+							if !originalName.startsWith('http')
 								if let newName = self.embedFile(exporter, self.files, global.decodeURIComponent(originalName))
 									dom(elem).attr('src', newName)
-									card.media.push(newName)						
+									card.media.push(newName)
 						deck.image_count += (card.back.match(/\<+\s?img/g) || []).length
 						card.back = dom.html()
-					
+
 					if let audiofile = find_mp3_file(card.back)
 						if let newFileName = self.embedFile(exporter, self.files, global.decodeURIComponent(audiofile))
 							console.log('added sound', newFileName)
@@ -352,7 +361,7 @@ export class DeckParser
 					const tmp = card.back
 					card.back = card.name
 					card.name = tmp
-			deck.cards = deck.cards.concat(addThese)	
+			deck.cards = deck.cards.concat(addThese)
 		exporter.configure(self.payload)
 		exporter.save()
 
