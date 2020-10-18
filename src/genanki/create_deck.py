@@ -91,9 +91,9 @@ if __name__ == "__main__":
             {
                 "name": "card1",
                 "qfmt": '<span class="front-text-pre">{{Front}}</span>',
-                "afmt": '<span class="front-text-post">{{Back}}</span>'
+                "afmt": '<span class="front-text-post">{{Front}}</span>'
                         '<hr id="answer">'
-                        '<span class="back-text">{{BField}}</span>',
+                        '<span class="back-text">{{Back}}</span>',
             }
         ],
         css=CSS,
