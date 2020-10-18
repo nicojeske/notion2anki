@@ -309,6 +309,18 @@ export class DeckParser
 					card.answer = inputInfo.answer
 
 				card.media = []
+				const frontDom = cheerio.load(card.name)
+				const images2 = frontDom('img')
+				if images2.length > 0
+				    console.log('Number of images2', images2.length)
+					images2.each do |i, elem|
+						const originalName = frontDom(elem).attr('src')
+						if !originalName.startsWith('http')
+							if let newName = self.embedFile(exporter, self.files, global.decodeURIComponent(originalName))
+								frontDom(elem).attr('src', newName)
+								card.media.push(newName)
+					deck.image_count += (card.back.match(/\<+\s?img/g) || []).length
+					card.name = frontDom.html()
 				if card.back
 					const dom = cheerio.load(card.back)
 					const images = dom('img')
