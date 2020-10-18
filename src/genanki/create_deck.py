@@ -38,7 +38,7 @@ def _wr_apkg(payload, media_files):
 
 
 def _read_template(template_dir, path, fmt, value):
-    file_path = path if path.startswith('/')  else template_dir + path
+    file_path = path if path.startswith('/') else template_dir + path
     with open(file_path, "r", encoding="utf-8") as file:
         if fmt and value:
             return file.read().replace(fmt, value)
@@ -83,17 +83,17 @@ if __name__ == "__main__":
         2020,
         "notion2anki",
         fields=[
-            {"name": "AField"},
-            {"name": "BField"},
+            {"name": "Front"},
+            {"name": "Back"},
             {"name": "MyMedia"},
         ],
         templates=[
             {
                 "name": "card1",
-                "qfmt": '<span class="front-text-pre">{{AField}}</span>',
-                "afmt": '<span class="front-text-post">{{AField}}</span>'
-                '<hr id="answer">'
-                '<span class="back-text">{{BField}}</span>',
+                "qfmt": '<span class="front-text-pre">{{Front}}</span>',
+                "afmt": '<span class="front-text-post">{{Back}}</span>'
+                        '<hr id="answer">'
+                        '<span class="back-text">{{BField}}</span>',
             }
         ],
         css=CSS,

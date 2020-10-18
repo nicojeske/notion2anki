@@ -31,3 +31,5 @@ ENV PORT 8080
 EXPOSE 8080
 
 CMD ["./node_modules/.bin/imba", "./src/server/server.imba"]
+# docker run --rm -it --name n2a -p 8080:8080 n2a
+#docker kill n2a & docker build -t n2a . & docker run --rm --name n2a -p 8080:8080 n2a
