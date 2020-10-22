@@ -2,6 +2,8 @@
 This file is a modifcation on one of the test files of genanki[0]
 [0]: https://github.com/kerrickstaley/genanki
 """
+import genanki
+
 """Test creating Cloze cards"""
 # https://apps.ankiweb.net/docs/manual20.html#cloze-deletion
 
@@ -16,6 +18,11 @@ from genanki import Deck
 from genanki import Package
 from genanki import guid_for
 
+
+class MyNote(genanki.Note):
+    @property
+    def guid(self):
+        return genanki.guid_for(self.fields[0])
 
 def _wr_apkg(payload, media_files):
     firstId = ""
@@ -140,7 +147,7 @@ if __name__ == "__main__":
                         card["answer"],
                         ",".join(card["media"]),
                     ]
-                my_note = Note(model, fields=fields, sort_field=card["number"], tags=card['tags'])
+                my_note = MyNote(model, fields=fields, sort_field=card["number"], tags=card['tags'])
                 notes.append(my_note)
                 media_files = media_files + card["media"]
             deck_desc = ""
@@ -157,3 +164,5 @@ if __name__ == "__main__":
             )
 
     _wr_apkg(decks, media_files)
+
+
