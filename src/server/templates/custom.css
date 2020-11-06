@@ -1,3 +1,4 @@
+	
 html,
 body {
   text-align: center;
@@ -15,8 +16,7 @@ body {
   padding: 16px;
   border-radius: 8px;
   margin: 16px;
-  max-width: 450px;
-  width: 90%;
+  width: 95%;
   display: inline-block;
   background-color:#333333  ;
 }
@@ -42,4 +42,9 @@ body {
 
 .extra {
   color: gray;
+}
+
+.context-title {
+	color: #17a6ff !important;
+	font-size: 1.2rem;
 }
