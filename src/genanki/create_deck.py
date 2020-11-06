@@ -22,7 +22,7 @@ from genanki import guid_for
 class MyNote(genanki.Note):
     @property
     def guid(self):
-        return genanki.guid_for(self.fields[0])
+        return genanki.guid_for(self.fields[1])
 
 def _wr_apkg(payload, media_files):
     firstId = ""
@@ -71,6 +71,7 @@ if __name__ == "__main__":
         998877661,
         "notion2Anki Cloze Model",
         fields=[
+            {"name": "Context"},
             {"name": "Text"},
             {"name": "Extra"},
             {"name": "MyMedia"},
@@ -78,7 +79,7 @@ if __name__ == "__main__":
         templates=[
             {
                 "name": "notion2Anki Cloze Card",
-                "qfmt": '<span class="front-text-pre">{{cloze:Text}}</span>',
+                "qfmt": '<span class="context-title">{{Context}}</span><br><span class="front-text-pre">{{cloze:Text}}</span>',
                 "afmt": '<span class="front-text-pre">{{cloze:Text}}</span><br><span class="extra">{{Extra}}</span>',
             },
         ],
@@ -90,6 +91,7 @@ if __name__ == "__main__":
         2020,
         "notion2anki",
         fields=[
+            {"name": "Context"},
             {"name": "Front"},
             {"name": "Back"},
             {"name": "MyMedia"},
@@ -97,7 +99,7 @@ if __name__ == "__main__":
         templates=[
             {
                 "name": "card1",
-                "qfmt": '<span class="front-text-pre">{{Front}}</span>',
+                "qfmt": '<span class="context-title">{{Context}}</span><br><span class="front-text-pre">{{Front}}</span>',
                 "afmt": '<span class="front-text-post">{{Front}}</span>'
                         '<hr id="answer">'
                         '<span class="back-text">{{Back}}</span>',
@@ -133,7 +135,7 @@ if __name__ == "__main__":
             notes = []
 
             for card in deck["cards"]:
-                fields = [card["name"], card["back"], ",".join(card["media"])]
+                fields = [card["context"], card["name"], card["back"], ",".join(card["media"])]
                 model = MY_CLOZE_MODEL
 
                 # TODO: sanity check the card fields

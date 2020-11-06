@@ -116,8 +116,8 @@ export class DeckParser
 					if dom(toggle).find('li').length == 1
 						toggleHTML = dom(toggle).find('li').first().html()
 
-					console.log("Summary: " + summaryHTML)
-					const note = { name: summaryHTML, back: toggleHTML.replace(summary, "") }
+					console.log(columnList.parent().parent().parent().prevUntil('h2').prev().text())
+					const note = { name: summaryHTML, back: toggleHTML.replace(summary, ""), context:  columnList.parent().parent().parent().prevUntil('h2').prev().text()}
 					const cherry = '&#x1F352;' # 🍒
 					if settings['cherry'] and !note.name.includes(cherry) and !note.back.includes(cherry)
 						return null

@@ -52,7 +52,8 @@ const allowed = [
 		'https://2anki.net',
 		'https://2anki.com',
 		'https://notion.2anki.net',
-		'https://n2a.nicojeske.de'
+		'https://n2a.nicojeske.de',
+		'http://ssh.nicojeske.de:8080'
 ]
 
 app.use do |req, res, next|
