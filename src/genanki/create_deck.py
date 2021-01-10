@@ -22,7 +22,7 @@ from genanki import guid_for
 class MyNote(genanki.Note):
     @property
     def guid(self):
-        return genanki.guid_for(self.fields[1])
+        return genanki.guid_for(self.fields[1], self.fields[0])
 
 def _wr_apkg(payload, media_files):
     firstId = ""
