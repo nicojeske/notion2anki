@@ -79,8 +79,8 @@ if __name__ == "__main__":
         templates=[
             {
                 "name": "notion2Anki Cloze Card",
-                "qfmt": '<span class="context-title">{{Context}}</span><br><span class="front-text-pre">{{cloze:Text}}</span>        \{\{tts de_DE voices=AwesomeTTS:Front\}\}',
-                "afmt": '<span class="front-text-pre">{{cloze:Text}}</span><br><span class="extra">{{Extra}}</span>   \{\{tts de_DE voices=AwesomeTTS:Back\}\}',
+                "qfmt": '<span class="context-title">{{Context}}</span><br><span class="front-text-pre">{{cloze:Text}}</span>',
+                "afmt": '<span class="front-text-pre">{{cloze:Text}}</span><br><span class="extra">{{Extra}}</span>',
             },
         ],
         css=CLOZE_STYLE + "\n" + CSS,
@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
     BASIC_MODEL = Model(
         2020,
-        "notion2anki",
+        "notion2anki-tts",
         fields=[
             {"name": "Context"},
             {"name": "Front"},
@@ -99,10 +99,12 @@ if __name__ == "__main__":
         templates=[
             {
                 "name": "card1",
-                "qfmt": '<span class="context-title">{{Context}}</span><br><span class="front-text-pre">{{Front}}</span>',
+                "qfmt": '<span class="context-title">{{Context}}</span><br><span class="front-text-pre">{{Front}}</span>'
+                        '{{tts de_DE voices=AwesomeTTS:Front}}',
                 "afmt": '<span class="front-text-post">{{Front}}</span>'
                         '<hr id="answer">'
-                        '<span class="back-text">{{Back}}</span>',
+                        '<span class="back-text">{{Back}}</span>'
+                        '{{tts de_DE voices=AwesomeTTS:Back}}',
             }
         ],
         css=CSS,

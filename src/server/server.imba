@@ -53,7 +53,8 @@ const allowed = [
 		'https://2anki.com',
 		'https://notion.2anki.net',
 		'https://n2a.nicojeske.de',
-		'http://ssh.nicojeske.de:8080'
+		'http://ssh.nicojeske.de:8080',
+		'https://2020-lavender-panther-hmdlv2r5.ws-eu03.gitpod.io'
 ]
 
 app.use do |req, res, next|
