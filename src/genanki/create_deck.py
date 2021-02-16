@@ -79,8 +79,8 @@ if __name__ == "__main__":
         templates=[
             {
                 "name": "notion2Anki Cloze Card",
-                "qfmt": '<span class="context-title">{{Context}}</span><br><span class="front-text-pre">{{cloze:Text}}</span>',
-                "afmt": '<span class="front-text-pre">{{cloze:Text}}</span><br><span class="extra">{{Extra}}</span>',
+                "qfmt": '<span class="context-title">{{Context}}</span><br><span class="front-text-pre">{{cloze:Text}}</span>        \{\{tts de_DE voices=AwesomeTTS:Front\}\}',
+                "afmt": '<span class="front-text-pre">{{cloze:Text}}</span><br><span class="extra">{{Extra}}</span>   \{\{tts de_DE voices=AwesomeTTS:Back\}\}',
             },
         ],
         css=CLOZE_STYLE + "\n" + CSS,
